@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Empleados</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<div class="pagina">
+    <div class="tarjeta tarjeta-ancha">
+        <h1>Empleados</h1>
+        <p class="subtitulo">Solo un ADMIN puede ver y administrar esta lista.</p>
+
+        <table class="tabla">
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Cargo</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${empleados}">
+                <td th:text="${e.nombre}"></td>
+                <td th:text="${e.email}"></td>
+                <td>
+                    <span class="badge" th:classappend="${e.cargo == 'Administrador'} ? 'badge-cerrada' : 'badge-proceso'"
+                          th:text="${e.cargo}"></span>
+                </td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${e.cargo == 'Administrador' or e.habilitado} ? 'badge-cerrada' : 'badge-abierta'"
+                          th:text="${e.cargo == 'Administrador' or e.habilitado} ? 'Habilitado' : 'Pendiente'"></span>
+                </td>
+                <td>
+                    <form th:if="${e.cargo != 'Administrador' and !e.habilitado}"
+                          th:action="@{'/admin/empleados/' + ${e.id} + '/habilitar'}" method="post" style="display:inline;">
+                        <button type="submit" class="boton-link">Habilitar</button>
+                    </form>
+                    <form th:if="${e.cargo != 'Administrador' and e.habilitado}"
+                          th:action="@{'/admin/empleados/' + ${e.id} + '/deshabilitar'}" method="post" style="display:inline;">
+                        <button type="submit" class="boton-link">Quitar permisos</button>
+                    </form>
+                    <form th:action="@{'/admin/empleados/' + ${e.id} + '/eliminar'}" method="post" style="display:inline;"
+                          onsubmit="return confirm('¿Seguro que quieres eliminar este empleado?');">
+                        <button type="submit" class="boton-link">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a th:href="@{/admin/empleados/nuevo}" class="boton-link" style="margin-top: 20px; display:inline-block;">
+            + Nuevo empleado
+        </a>
+    </div>
+</div>
+</body>
+</html>

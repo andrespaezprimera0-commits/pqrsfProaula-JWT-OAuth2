@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Empleado</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<div class="pagina">
+    <div class="tarjeta">
+        <h1>Nuevo empleado</h1>
+        <p class="subtitulo">Si el cargo no es "Administrador", el empleado quedará pendiente hasta que lo habilites en la lista.</p>
+
+        <div th:if="${error}" class="alerta error" th:text="${error}"></div>
+
+        <form th:action="@{/admin/empleados/nuevo}" method="post" class="formulario">
+            <label>Nombre:</label>
+            <input type="text" name="nombre" required>
+
+            <label>Correo:</label>
+            <input type="email" name="email" required>
+
+            <label>Cargo:</label>
+            <select name="cargo" required>
+                <option value="Administrador">Administrador (acceso total)</option>
+                <option value="Atención al cliente">Atención al cliente</option>
+                <option value="Soporte técnico">Soporte técnico</option>
+                <option value="Recepción">Recepción</option>
+            </select>
+
+            <label>Contraseña:</label>
+            <input type="password" name="contrasena" required>
+
+            <button type="submit">Crear empleado</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
